@@ -122,12 +122,25 @@ export default function AdminCheckInPage() {
            (decodedText: string) => {
              // Stop scanning on success
              if (scannerRef.current) {
-                 scannerRef.current.stop().then(() => {
+                 try {
+                   if (scannerRef.current.getState() === 2) {
+                     scannerRef.current.stop().then(() => {
+                         if (scannerRef.current) scannerRef.current.clear();
+                         scannerRef.current = null;
+                         setIsScanning(false);
+                         performValidate(decodedText);
+                     }).catch((e: any) => console.error(e));
+                   } else {
                      scannerRef.current.clear();
                      scannerRef.current = null;
                      setIsScanning(false);
                      performValidate(decodedText);
-                 }).catch((e: any) => console.error(e));
+                   }
+                 } catch (e) {
+                   scannerRef.current = null;
+                   setIsScanning(false);
+                   performValidate(decodedText);
+                 }
              }
            },
            (err: any) => {
@@ -144,31 +157,39 @@ export default function AdminCheckInPage() {
 
     return () => {
       if (scannerRef.current) {
-        scannerRef.current.stop().then(() => {
-           if (scannerRef.current) {
-               scannerRef.current.clear();
-               scannerRef.current = null;
+         try {
+           if (scannerRef.current.getState() === 2) {
+             scannerRef.current.stop().then(() => {
+                 if (scannerRef.current) scannerRef.current.clear();
+                 scannerRef.current = null;
+             }).catch((e: any) => console.error(e));
+           } else {
+             scannerRef.current.clear();
+             scannerRef.current = null;
            }
-        }).catch((e: any) => {
-           console.error("Error stopping scanner on unmount", e);
-           if (scannerRef.current) scannerRef.current.clear();
+         } catch (e) {
            scannerRef.current = null;
-        });
+         }
       }
     };
   }, [isScanning]);
 
   const stopCamera = () => {
+    setIsScanning(false);
     if (scannerRef.current) {
-        scannerRef.current.stop().then(() => {
-            if (scannerRef.current) {
-                scannerRef.current.clear();
-                scannerRef.current = null;
-            }
-            setIsScanning(false);
-        }).catch((e: any) => console.error(e));
-    } else {
-        setIsScanning(false);
+       try {
+         if (scannerRef.current.getState() === 2) {
+           scannerRef.current.stop().then(() => {
+               if (scannerRef.current) scannerRef.current.clear();
+               scannerRef.current = null;
+           }).catch((e: any) => console.error(e));
+         } else {
+           scannerRef.current.clear();
+           scannerRef.current = null;
+         }
+       } catch (e) {
+         scannerRef.current = null;
+       }
     }
   };
 

@@ -14,6 +14,11 @@ export default function Passes() {
     <>
       <Navbar />
       <main className="flex-1 py-12 px-4 max-w-7xl mx-auto w-full">
+        <div className="mb-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-gold hover:text-white transition-colors text-sm font-medium">
+            <span>← Back</span>
+          </Link>
+        </div>
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-playfair font-bold text-gold mb-4 uppercase">Get Your Passes</h1>
           <p className="text-gray-300 max-w-2xl mx-auto">

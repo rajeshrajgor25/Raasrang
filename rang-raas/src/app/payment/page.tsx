@@ -50,10 +50,17 @@ export default async function PaymentPage({ searchParams }: { searchParams: Prom
     dynamicUpiUrl = `upi://pay?pa=${ownerUpiId}&pn=RANG%20RAAS&am=${booking.total_amount}&cu=INR&tn=${booking.booking_id}`;
   }
 
+  const bookingType = booking.pass_type.toLowerCase() === "early bird" ? "early-bird" : "regular";
+
   return (
     <>
       <Navbar />
       <main className="flex-1 py-12 px-4 max-w-3xl mx-auto w-full">
+        <div className="mb-6">
+          <Link href={`/booking?type=${bookingType}&quantity=${booking.quantity}`} className="inline-flex items-center gap-2 text-gold hover:text-white transition-colors text-sm font-medium">
+            <span>← Back to Details</span>
+          </Link>
+        </div>
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-playfair font-bold text-gold uppercase mb-2">Complete Your Payment</h1>
           <p className="text-gray-400 font-mono">Booking ID: {bookingId}</p>
